@@ -1,0 +1,54 @@
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║                               CORE BUILD & DEPLOY                                  ║
+╠══════════════════════════════════════════════════════════════════════════════════╣
+║ ► mvn clean package -B                                                             ║
+║     Purpose: Cleans the project, then compiles, runs unit tests, and packages      ║
+║              your application (e.g., .jar, .war). The artifact is in the 'target'  ║
+║              directory, ready for the next step (e.g., Docker build, deployment).  ║
+║     Usage:   Most common command to build your application artifact.               ║
+╠══════════════════════════════════════════════════════════════════════════════════╣
+║ ► mvn clean install -B                                                             ║
+║     Purpose: Same as 'clean package', but also **installs** the artifact into the  ║
+║              local Maven repository of the build agent.                            ║
+║     Usage:   Essential for multi-module projects where one module depends on       ║
+║              another *within the same CI build*.                                   ║
+╠══════════════════════════════════════════════════════════════════════════════════╣
+║ ► mvn deploy -B                                                                    ║
+║     Purpose: Publishes the built artifact to a **remote Maven repository** ║
+║              (like Artifactory, Nexus).                                            ║
+║     Usage:   The key step for artifact management and version control in CI/CD.    ║
+╠══════════════════════════════════════════════════════════════════════════════════╣
+║ ► mvn verify -B                                                                    ║
+║     Purpose: Runs all phases up to 'package', then executes **integration tests** ║
+║              and other quality checks (if configured).                             ║
+║     Usage:   When your pipeline needs to enforce quality gates and run more        ║
+║              extensive tests after the package is created, but before deployment. ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║                             ESSENTIAL FLAGS / OPTIONS                              ║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║ ► `-B` or `--batch-mode`                                                          ║
+║     Why DevOps uses it: Makes Maven run non-interactively (no prompts).            ║
+║     Usage:   **Almost always included** in CI/CD scripts.                         ║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║ ► `-U` or `--update-snapshots`                                                    ║
+║     Why DevOps uses it: Forces Maven to check remote repos for the *latest* ║
+║              snapshot versions of dependencies.                                    ║
+║     Usage:   Critical for pipelines relying on continuously updated snapshot      ║
+║              dependencies.                                                         ║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║ ► `-P<profileId>`                                                                 ║
+║     Why DevOps uses it: Activates specific build profiles to adapt the build       ║
+║              for different CI environments (e.g., `ci-build`, `test-env`).         ║
+║     Usage:   When your build configuration needs to vary by environment.           ║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║ ► `-D<property>=<value>`                                                          ║
+║     Why DevOps uses it: Sets properties to control plugin behavior or inject        ║
+║              dynamic values (like build numbers from the CI system).               ║
+║     Usage:   `mvn package -DskipTests` (caution!), `mvn deploy -Dbuild.id=$CI_RUN`║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║ ► `-T <threads>` or `--threads <threads>`                                         ║
+║     Why DevOps uses it: Builds multi-module projects in parallel to speed up builds.║
+║     Usage:   For large multi-module repositories in CI/CD. Example: `-T 1C`        ║
+║              (one thread per CPU core).                                            ║
+╚═══════════════════════════════════════════════════════════════════════════════════╝
