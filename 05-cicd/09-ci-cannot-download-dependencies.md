@@ -95,3 +95,7 @@ aws codeartifact get-authorization-token ...
 > - Clean local cache and retry
 
 ---
+
+npm publish
+./gradlew publish
+mvn clean deploy
